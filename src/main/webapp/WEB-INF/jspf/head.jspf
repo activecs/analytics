@@ -1,0 +1,5 @@
+<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
+
+<template:meta/>
+<template:css/>
+

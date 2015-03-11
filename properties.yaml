@@ -1,0 +1,45 @@
+properties:
+  ###############################################
+  ## Global environment configuration
+  ###############################################
+  global: &global_env
+    
+    database.driver.class: com.mysql.jdbc.Driver
+    hibernate.hbm2ddl.auto: create-drop
+    hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate.show.sql: true
+    hibernate.initial.data: initial_data.sql
+    avatar.storage.folder : avatars
+    avatar.default : profile-placeholder.jpg
+    
+  ###############################################
+  ## Local environment configuration
+  ###############################################
+  config-local: &config-local
+    <<: *global_env
+
+    database.username: root
+    database.password: root
+    database.url: jdbc:mysql://127.0.0.1:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
+
+   
+  ###############################################
+  ## OpenShift environment configuration
+  ###############################################
+  config-openshift: &config-openshift
+    <<: *global_env
+
+    
+    database.username: adminwuRFBg7
+    database.password: 8EWFTbv4nc71
+    database.url: jdbc:mysql://127.8.153.130:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
+    
+  ###############################################
+  ## Amazon environment configuration
+  ###############################################
+  config-amazon: &config-amazon
+    <<: *global_env
+
+    database.username: root
+    database.password: root
+    database.url: jdbc:mysql://127.0.0.1:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8

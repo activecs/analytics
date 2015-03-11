@@ -1,0 +1,8 @@
+<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template"%>
+
+<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+	<div class="container">
+		<p class="text-center lead">Copyright &copy; kaa-team 2014</p>
+	</div>
+</nav>
+<template:js />
