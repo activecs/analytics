@@ -17,5 +17,4 @@ activemq-data/*
 /bin/
 /target
 src/main/resources/application.properties
-src/main/webapp/resources/css/changes.css
 src/main/webapp/avatars/*

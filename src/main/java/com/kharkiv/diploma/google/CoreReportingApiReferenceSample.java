@@ -1,5 +1,13 @@
 package com.kharkiv.diploma.google;
 
+import static java.util.Arrays.asList;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -8,7 +16,6 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.AnalyticsScopes;
@@ -17,70 +24,66 @@ import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 import com.google.api.services.analytics.model.GaData.ProfileInfo;
 import com.google.api.services.analytics.model.GaData.Query;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-
 public class CoreReportingApiReferenceSample {
 
   private static final String APPLICATION_NAME = "api-project-837863644970";
   private static final String TABLE_ID = "ga:90810667";
   private static final File DATA_STORE_DIR = new File(System.getProperty("user.home"), ".store/analytics_sample");
 
-  /**
-   * Global instance of the {@link DataStoreFactory}. The best practice is to make it a single
-   * globally shared instance across your application.
-   */
-  private static FileDataStoreFactory DATA_STORE_FACTORY;
-  private static HttpTransport HTTP_TRANSPORT;
-  private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+  private FileDataStoreFactory DATA_STORE_FACTORY;
+  private HttpTransport HTTP_TRANSPORT;
+  private final JsonFactory JSON_FACTORY = new JacksonFactory();
 
   
-  public static void main(String[] args) {
-    try {
-      HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-      DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-      Analytics analytics = initializeAnalytics();
-      GaData gaData = executeDataQuery(analytics, TABLE_ID);
-
-      printReportInfo(gaData);
-      printProfileInfo(gaData);
-      printQueryInfo(gaData);
-      printPaginationInfo(gaData);
-      printTotalsForAllResults(gaData);
-      printColumnHeaders(gaData);
-      printDataTable(gaData);
-
-    } catch (GoogleJsonResponseException e) {
-      System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
-          + e.getDetails().getMessage());
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
+  public static void main(String[] args) throws Exception {
+	  CoreReportingApiReferenceSample sample = new CoreReportingApiReferenceSample();
+	  sample.getAndPrintReportData();
+  }
+  
+  public void getAndPrintReportData() throws Exception{
+	  try {
+	      HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+	      DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
+	      Analytics analytics = initializeAnalytics();
+	      GaData gaData = executeDataQuery(analytics, TABLE_ID);
+	
+	      printReportInfo(gaData);
+	      printProfileInfo(gaData);
+	      printQueryInfo(gaData);
+	      printPaginationInfo(gaData);
+	      printTotalsForAllResults(gaData);
+	      printColumnHeaders(gaData);
+	      printDataTable(gaData);
+	
+	    } catch (GoogleJsonResponseException e) {
+	      System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
+	          + e.getDetails().getMessage());
+	    }
   }
 
   /** Authorizes the installed application to access user's protected data. */
-  private static Credential authorize() throws Exception {
+  private Credential authorize() throws Exception {
     // load client secrets
-    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(CoreReportingApiReferenceSample.class.getResourceAsStream("/client_secrets.json")));
-    if (clientSecrets.getDetails().getClientId().startsWith("Enter") || clientSecrets.getDetails().getClientSecret().startsWith("Enter ")) {
+	InputStreamReader clientSecretStream =  new InputStreamReader(CoreReportingApiReferenceSample.class.getResourceAsStream("/client_secrets.json"));
+    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, clientSecretStream);
+    
+    if (isNotSecretLoaded(clientSecrets)) {
       System.out.println(
           "Enter Client ID and Secret from https://code.google.com/apis/console/?api=analytics "
           + "into analytics-cmdline-sample/src/main/resources/client_secrets.json");
       System.exit(1);
     }
+    
     // set up authorization code flow
-    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-        HTTP_TRANSPORT, JSON_FACTORY, clientSecrets,
-        Collections.singleton(AnalyticsScopes.ANALYTICS_READONLY)).setDataStoreFactory(
-        DATA_STORE_FACTORY).build();
+    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, asList(AnalyticsScopes.ANALYTICS_READONLY))
+    	.setDataStoreFactory(DATA_STORE_FACTORY).build();
     // authorize
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
   }
+
+	private boolean isNotSecretLoaded(GoogleClientSecrets clientSecrets) {
+		return clientSecrets.getDetails().getClientId().startsWith("Enter") || clientSecrets.getDetails().getClientSecret().startsWith("Enter ");
+	}
 
   /**
    * Performs all necessary setup steps for running requests against the API.
@@ -89,13 +92,12 @@ public class CoreReportingApiReferenceSample {
    *
    * @throws Exception if an issue occurs with OAuth2Native authorize.
    */
-  private static Analytics initializeAnalytics() throws Exception {
+  private Analytics initializeAnalytics() throws Exception {
     // Authorization.
     Credential credential = authorize();
-
-    // Set up and return Google Analytics API client.
-    return new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
-        APPLICATION_NAME).build();
+    // Set up and Google Analytics API client.
+    Analytics client =  new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
+    return client;
   }
 
   /**
@@ -107,12 +109,12 @@ public class CoreReportingApiReferenceSample {
    * @return the response from the API.
    * @throws IOException if an API error occured.
    */
-  private static GaData executeDataQuery(Analytics analytics, String tableId) throws IOException {
+  private GaData executeDataQuery(Analytics analytics, String tableId) throws IOException {
     return analytics.data().ga().get(tableId, // Table Id.
-        "2012-01-01", // Start date.
-        "2014-11-14", // End date.
+        "2014-09-01", // Start date.
+        "2014-11-01", // End date.
         "ga:visits") // Metrics.
-        .setDimensions("ga:source,ga:keyword")
+        .setDimensions("ga:source")
         .setSort("-ga:visits,ga:source")
         .setMaxResults(25)
         .execute();
@@ -123,7 +125,7 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printReportInfo(GaData gaData) {
+  private void printReportInfo(GaData gaData) {
     System.out.println();
     System.out.println("Response:");
     System.out.println("ID:" + gaData.getId());
@@ -137,7 +139,7 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printProfileInfo(GaData gaData) {
+  private void printProfileInfo(GaData gaData) {
     ProfileInfo profileInfo = gaData.getProfileInfo();
 
     System.out.println("Profile Info");
@@ -154,7 +156,7 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printQueryInfo(GaData gaData) {
+  private void printQueryInfo(GaData gaData) {
     Query query = gaData.getQuery();
 
     System.out.println("Query Info:");
@@ -175,7 +177,7 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printPaginationInfo(GaData gaData) {
+  private void printPaginationInfo(GaData gaData) {
     System.out.println("Pagination Info:");
     System.out.println("Previous Link: " + gaData.getPreviousLink());
     System.out.println("Next Link: " + gaData.getNextLink());
@@ -188,7 +190,7 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printTotalsForAllResults(GaData gaData) {
+  private void printTotalsForAllResults(GaData gaData) {
     System.out.println("Metric totals over all results:");
     Map<String, String> totalsMap = gaData.getTotalsForAllResults();
     for (Map.Entry<String, String> entry : totalsMap.entrySet()) {
@@ -202,7 +204,7 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printColumnHeaders(GaData gaData) {
+  private void printColumnHeaders(GaData gaData) {
     System.out.println("Column Headers:");
 
     for (ColumnHeaders header : gaData.getColumnHeaders()) {
@@ -217,14 +219,13 @@ public class CoreReportingApiReferenceSample {
    *
    * @param gaData the data returned from the API.
    */
-  private static void printDataTable(GaData gaData) {
+  private void printDataTable(GaData gaData) {
     if (gaData.getTotalResults() > 0) {
       System.out.println("Data Table:");
 
       // Print the column names.
-      for (ColumnHeaders header : gaData.getColumnHeaders()) {
+      for (ColumnHeaders header : gaData.getColumnHeaders())
         System.out.format("%-32s", header.getName());
-      }
       System.out.println();
 
       // Print the rows of data.

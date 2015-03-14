@@ -36,5 +36,4 @@
 <script type="text/javascript" src="<c:url value='/resources/js/jsrender.min.js'/>"></script>
 
 <!-- customization js -->
-<script type="text/javascript" src="<c:url value='/resources/js/sockets.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/changes.js'/>"></script>

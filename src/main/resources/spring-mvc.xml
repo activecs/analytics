@@ -25,14 +25,6 @@
 			<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${database.driver.class}" />
-		<property name="url" value="${database.url}" />
-		<property name="username" value="${database.username}" />
-		<property name="password" value="${database.password}" />
-	</bean>
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/pages/" />

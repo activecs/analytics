@@ -18,7 +18,7 @@
         http://www.springframework.org/schema/cache/spring-cache-4.1.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.kharkiv.board" />
+	<context:component-scan base-package="com.kharkiv" />
 	<context:property-placeholder location="classpath:application.properties" />
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<cache:annotation-driven />
@@ -48,7 +48,7 @@
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan" value="com.kharkiv.board.dto" />
+		<property name="packagesToScan" value="com.kharkiv" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
@@ -81,11 +81,5 @@
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
 		<property name="validationMessageSource" ref="messageSource" />
 	</bean>
-	
-	<bean id="user" class="com.kharkiv.board.dto.user.User" scope="session">
-		<aop:scoped-proxy/>
-	</bean>
-	
-	<bean id="avatarService" class="com.kharkiv.board.service.AvatarServiceImpl" />
 	
 </beans>

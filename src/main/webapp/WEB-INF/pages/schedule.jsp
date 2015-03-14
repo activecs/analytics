@@ -1,14 +1,11 @@
 <%@ include file="/WEB-INF/jspf/taglibs.jspf"%>
 <template:page title="Schedule">
 
-	<!-- Blog Entries Column -->
 	<div class="col-md-8">
 	
 	    <h1 class="page-header">
 	        <spring:message code="events"/>
 	        <small></small>
-	        <secure:authorized roles="user,admin">
-	        </secure:authorized>
 	        <button  type="button" class="btn btn-primary pull-right add-event"><spring:message code="event.add.new"/></button>
 	        
 	    </h1>
@@ -54,41 +51,7 @@
 	    
 	    <!-- Posts -->
 		<div id="posts">
-		    <c:forEach items="${schedules}" var="schedule" >
-			    <h2>
-			        <a href="#">${schedule.title}</a>
-			    </h2>
-			    <c:set var="userName" value="${empty schedule.user.login ? 'somebody' : schedule.user.login}" />
-			    <p class="lead">
-			        <spring:message code="event.posted.by" /> <a href="#">${userName}</a>
-			    </p>
-			    <p>
-			    	<span class="glyphicon glyphicon-time"></span> 
-			    	<spring:message code="event.posted.on" /> <fmt:formatDate pattern="dd.MM.yyyy - hh:mm" value="${schedule.created.time}"/>
-			    </p>
-			    <hr>
-			    <img class="img-responsive" src="http://www.charitybrooks.com/wp-content/uploads/2012/12/Beachbody-Workouts-Riutine.jpg" alt="${schedule.title}">
-			    <hr>
-			    <p>
-			    	<spring:message code="event.where"/> ${schedule.place}
-			    	<br>
-			    	<spring:message code="event.when"/> <fmt:formatDate pattern="dd.MM.yyyy - hh:mm" value="${schedule.dateTime.time}" />
-			    </p>
-			    <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-			    <hr>
-		    </c:forEach>
 		</div>
-	
-	    <!-- Pager -->
-	    <ul class="pager">
-	        <li class="previous">
-	            <a href="#">&larr; Older</a>
-	        </li>
-	        <li class="next">
-	            <a href="#">Newer &rarr;</a>
-	        </li>
-	    </ul>
-	
 	</div>
 	
 </template:page>
