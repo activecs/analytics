@@ -7,7 +7,7 @@
 	var locale = "${loc}";
 </script>
 
-<div class="btn-group lang-selector">
+<div style="display:none" class="btn-group lang-selector">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 		<span class="lang-sm lang-lbl" lang="${loc}"></span> 
 		<span class="caret"></span>

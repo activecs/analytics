@@ -19,8 +19,6 @@
 
 <!-- date time picker -->
 <script type="text/javascript" src="<c:url value='/resources/js/libs/datetimepicker.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/resources/js/locales/datetimepicker.uk.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/resources/js/locales/datetimepicker.ua.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/locales/datetimepicker.ru.js'/>"></script>
 
 <!-- jQuery validate -->
@@ -30,4 +28,6 @@
 </c:if>
 
 <!-- customization js -->
+<script type="text/javascript" src="<c:url value='/resources/js/app.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/changes.js'/>"></script>
+

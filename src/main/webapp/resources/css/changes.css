@@ -1,12 +1,6 @@
-body { padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */ }
-
-footer { margin: 50px 0; }
-
 form.add-event { display: none; }
 
 .btn-group.lang-selector { margin: 7px; }
-
-#avatar-preview { width: 180px; height: 180px; border: solid 1px cccccc; border-radius: 5px; }
 
 error { color: red; }
 

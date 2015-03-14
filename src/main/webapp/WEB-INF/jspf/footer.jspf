@@ -1,8 +1,9 @@
 <%@ taglib tagdir="/WEB-INF/tags/template" prefix="template"%>
 
-<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-	<div class="container">
-		<p class="text-center lead">Copyright &copy; Eduard Dereza 2015</p>
-	</div>
-</nav>
+<div class="pull-right hidden-xs">
+    Anything you want
+</div>
+<!-- Default to the left --> 
+<strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+
 <template:js />
