@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 	<div class="container">
-		<p class="text-center lead">Copyright &copy; kaa-team 2014</p>
+		<p class="text-center lead">Copyright &copy; Eduard Dereza 2015</p>
 	</div>
 </nav>
 <template:js />

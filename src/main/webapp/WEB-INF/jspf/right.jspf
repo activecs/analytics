@@ -52,23 +52,6 @@
 			              <input type="password" name="confirm_password" id="confirm_password" class="form-control input-lg" onkeydown="registrationService.cleanServerErrors(this)" placeholder="<fmt:message key="sign.up.confirm.password"/>">
 			              <span id="conf_failed" class="error" style="display: none;"><strong><fmt:message key="sing.up.pass.conf.not.match"/></strong></span>
 			            </div>
-				        <hr style="margin-top:0px; margin-bottom:0px"/>
-				        <h4 align="center"><fmt:message key="sign.up.avatar"/></h4>
-				        <div align="center" style="margin-bottom: 1em">
-				        	<img id="avatar-preview" src='<c:url value="/resources/images/profile-placeholder.jpg" />'  width="200px" height="200px"/>
-			         		<span id="image_error" class="error" style="display: none;"><fmt:message key="sign.up.image.too.big"/></span>
-				        </div>
-				        <div align="right">
-							<span class="btn btn-success fileinput-button">
-								<i class="glyphicon glyphicon-plus"></i>
-							<span><fmt:message key="sign.up.add.file"/></span>
-							<input id="fileupload" type="file" name="file" accept="image/x-png, image/gif, image/jpeg" >
-							</span>
-							<a id='cnlBtn' class="btn btn-danger delete" href="#" role="button" onclick="registrationService.clean()">
-								<i class="glyphicon glyphicon-trash"></i>
-								<span><fmt:message key="sign.up.remove.file"/></span>
-							</a>
-						</div>
 			         </form>
 				</div>
 				<div class="modal-footer reg">

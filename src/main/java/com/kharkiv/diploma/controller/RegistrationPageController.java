@@ -33,11 +33,8 @@ import com.kharkiv.diploma.service.RegistrationService;
 @RequestMapping("/registration")
 public class RegistrationPageController {
 
-	private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5MB 
 	private static final String USERNAME_PARAMETER = "login";
 	private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
-	private static final String AVATAR_PARAMETER = "avatar-preview";
-	private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
 	private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
 	private static final String ERROR_MESSAGE_PASSWORDS_NOT_MATCH = "sing.up.pass.conf.not.match";
 
@@ -76,7 +73,6 @@ public class RegistrationPageController {
 		errors.add(validatePasswordConfirmation(newUser.getPassword(), confirmPassword));
 		errors.addAll(validateUserConstraints(newUser));
 		errors.add(validaUserExistence4Username(newUser.getUsername()));
-		errors.add(saveAvatar(file, newUser));
 		errors.removeAll(singleton(null));
 
 		return errors;
@@ -118,20 +114,6 @@ public class RegistrationPageController {
 		return null;
 	}
 
-	private Error saveAvatar(MultipartFile file, User user) throws IOException, NoSuchAlgorithmException {
-		Error validationError = validateAvatarSize(file);
-		if (validationError != null)
-			return validationError;
-		return null;
-	}
-
-	private Error validateAvatarSize(MultipartFile image) {
-		if (image.getSize() > MAX_FILE_SIZE) {
-			String message = getErrorMessage(ERROR_MESSAGE_LARGE_IMAGE_SIZE);
-			return new Error(AVATAR_PARAMETER, message);
-		}
-		return null;
-	}
 
 	private class RegistrationResponse {
 		public boolean isValid;
