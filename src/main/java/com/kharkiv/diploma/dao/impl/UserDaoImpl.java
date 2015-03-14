@@ -1,4 +1,4 @@
-package com.kharkiv.diploma.dao;
+package com.kharkiv.diploma.dao.impl;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
+import com.kharkiv.diploma.dao.UserDao;
 import com.kharkiv.diploma.dto.user.User;
 import com.kharkiv.diploma.util.QueryNamesConstants.UserQueries;
 

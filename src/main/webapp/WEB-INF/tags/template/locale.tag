@@ -15,6 +15,5 @@
 	<ul class="dropdown-menu dropdown-menu-right" role="menu">
 		<li><a><span class="lang-sm lang-lbl" onclick="common.changeLocale('en')" lang="en"></span></a></li>
 		<li><a><span class="lang-sm lang-lbl" onclick="common.changeLocale('ru')" lang="ru"></span></a></li>
-		<li><a><span class="lang-sm lang-lbl" onclick="common.changeLocale('uk')" lang="uk"></span></a></li>
 	</ul>
 </div>

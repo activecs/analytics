@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,9 +42,6 @@ public class Session extends BaseEntity {
 	@Enumerated
 	private SessionStatus status;
 	
-	@Column(length = 50)
-	private String provider;
-	
 	@OneToMany(mappedBy="session", fetch = FetchType.EAGER)
 	private List<PageView> pageViews;
 	
@@ -58,8 +56,8 @@ public class Session extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar closed;
 	
-	@ManyToOne
-	private Session session;
+	@OneToOne
+	private Navigation navigation;
 
 	public Visitor getVisitor() {
 		return visitor;
@@ -83,14 +81,6 @@ public class Session extends BaseEntity {
 
 	public void setStatus(SessionStatus status) {
 		this.status = status;
-	}
-
-	public String getProvider() {
-		return provider;
-	}
-
-	public void setProvider(String provider) {
-		this.provider = provider;
 	}
 
 	public List<PageView> getPageViews() {
@@ -133,14 +123,6 @@ public class Session extends BaseEntity {
 
 	public void setClosed(Calendar closed) {
 		this.closed = closed;
-	}
-
-	public Session getSession() {
-		return session;
-	}
-
-	public void setSession(Session session) {
-		this.session = session;
 	}
 	
 }
