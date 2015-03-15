@@ -1,8 +1,1 @@
-form.add-event { display: none; }
 
-.btn-group.lang-selector { margin: 7px; }
-
-error { color: red; }
-
-.modal-dialog.registration .reg-success { display: none; }
-.modal-dialog.registration .reg-server-error { display: none; }

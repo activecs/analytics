@@ -1,41 +1,5 @@
 $(function() {
-	scheduleForm.bindEvents();
-	$('.form_datetime').datetimepicker({
-		language : locale,
-		format : "dd.mm.yyyy - hh:ii",
-		autoclose : true,
-		todayHighlight : true,
-		startDate : "2015-01-01 10:00",
-		minuteStep : 10
-	});
-
-	$('.glyphicon-remove').bind('click', function() {
-		$(this).closest('div').find('input').val('');
-	});
-
-	var registrationsForm = $('#registrationForm');
-
-	registrationsForm.validate({
-		debug : true,
-		rules : {
-			login : {
-				required : true,
-				minlength : 3
-			},
-			password : {
-				required : true,
-				minlength : 6
-			},
-			confirm_password : {
-				required : true,
-				minlength : 6
-			},
-		}
-	});
-
-	registrationsForm.submit(function(e) {
-		registrationService.formSubmit(e);
-	});
+	
 });
 
 var common = {
@@ -117,13 +81,6 @@ var registrationService = {
 			});
 		}
 	},
-
-	clean : function cleanPreview() {
-		$("#avatar-preview").attr("src", "/resources/images/profile-placeholder.jpg");
-		var input = $("#fileupload");
-		input.prop('disabled', false);
-		input.replaceWith(input.val('').clone(true));
-	},
 	
 	handleServerError : function() {
 		this.$registrationModal.find(".reg").css({
@@ -132,33 +89,6 @@ var registrationService = {
 		this.$registrationModal.find(".reg-server-error").css({
 			'display' : 'block'
 		});
-	},
-
-	createPreview : function(element) {
-		$('#image_error').css({
-			'display' : 'none'
-		});
-		
-		var files = !!element.files ? element.files : [];
-		if (!files.length || !window.FileReader)
-			return;
-
-		if (/^image/.test(files[0].type)) {
-			// lower than 5MB
-			if (files[0].size <= 5242880) {
-				var reader = new FileReader();
-				reader.onloadend = function(event) {
-					$("#avatar-preview").attr("src", event.target.result);
-				}
-				reader.readAsDataURL(files[0]);
-				$("#fileupload").prop('disabled', 'disabled');
-			} else {
-				registrationService.clean();
-				$('#image_error').css({
-					'display' : 'block'
-				});
-			}
-		}
 	},
 
 	cleanServerErrors : function remove(element) {
@@ -195,55 +125,5 @@ var registrationService = {
 			}
 		});
 		e.preventDefault();
-	}
-}
-
-var scheduleForm = {
-
-	$form : $('form.add-event'),
-
-	bindEvents : function() {
-		$('button.add-event').bind('click', function() {
-			scheduleForm.show();
-		});
-
-		this.$form.find('button.cancel').bind('click', function() {
-			scheduleForm.hide();
-		});
-
-		this.$form.validationEngine('attach', {
-			promptPosition : "centerRight",
-			showOneMessage : true,
-			scroll : false,
-			onValidationComplete : function(form, isValid) {
-				if (isValid)
-					scheduleForm.send();
-			}
-		});
-	},
-
-	show : function() {
-		this.$form.animate({
-			opacity : 1,
-			height : "toggle"
-		}, 500);
-	},
-
-	hide : function() {
-		this.$form.animate({
-			opacity : 0,
-			height : "toggle"
-		}, 500);
-	},
-
-	clear : function() {
-		this.$form.trigger('reset');
-	},
-
-	send : function() {
-		var json = common.convertFormToJSON(this.$form);
-		
-		scheduleForm.hide();
-		scheduleForm.clear();
 	}
 }
