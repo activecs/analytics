@@ -11,7 +11,8 @@ properties:
     hibernate.initial.data: initial_data.sql
     client.secret.json.file: client_secrets.json
     avatar.storage.folder : avatars
-    avatar.default : profile-placeholder.jpg
+    avatar.default: profile-placeholder.jpg
+    product.default.treshold: 50
     
   ###############################################
   ## Local environment configuration

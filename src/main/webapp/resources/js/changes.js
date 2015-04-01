@@ -23,6 +23,23 @@ var common = {
 	}
 }
 
+//-----------------
+//- SPARKLINE BAR -
+//-----------------
+var spark = {
+	
+	initBar : function($selector){
+		$($selector).each(function () {
+			var $this = $(this);
+			$this.sparkline('html', {
+				type: 'bar',
+			    height: $this.data('height') ? $this.data('height') : '30',
+			    barColor: $this.data('color')
+			});
+		});
+	}
+}
+
 var registrationService = {
 
 	REGISTRATION_URL : 'registration',
@@ -127,3 +144,197 @@ var registrationService = {
 		e.preventDefault();
 	}
 }
+
+//****************************//
+//BROWSER USAGE WIDGET      //
+//****************************//
+var browserUsage = {
+
+	URL : "/browser/usage",
+
+	show : function(elementId) {
+		this.init(elementId);
+	},
+
+	init : function(elementId) {
+		$.ajax({
+			url : browserUsage.URL,
+			type : 'GET',
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(data) {
+				browserUsage.build(data, elementId);
+			},
+			error : function() {
+				alert('error');
+			}
+		})
+	},
+
+	build : function(data, elementId) {
+		var browserUsageData = new Array();
+		for ( var browserIndex in data) {
+			var browserData = data[browserIndex];
+			var browserName = browserData.browser.name;
+			var labelColour = this.getLabelColours()[browserIndex];
+			var browserUsage = new BrowserUsage(browserData.occurence, labelColour, browserName);
+			browserUsageData.push(browserUsage);
+		}
+		var pieChartCanvas = $("#" + elementId + " .chart-area").get(0).getContext("2d");
+		var pieChart = new Chart(pieChartCanvas);
+		var doughnut = pieChart.Doughnut(browserUsageData, this.getOptions());
+
+		this.buildLegend(doughnut, $("#" + elementId + " .chart-legend"));
+	},
+
+	getLabelColours : function() {
+		return [ "#f56954", "#00a65a", "#f39c12", "#00c0ef", "#3c8dbc",
+				"#d2d6de" ];
+	},
+
+	getOptions : function() {
+		var pieOptions = {
+			// Boolean - Whether we should show a stroke on each segment
+			segmentShowStroke : true,
+			// String - The colour of each segment stroke
+			segmentStrokeColor : "#fff",
+			// Number - The width of each segment stroke
+			segmentStrokeWidth : 1,
+			// Number - The percentage of the chart that we cut out of the
+			// middle
+			percentageInnerCutout : 50, // This is 0 for Pie charts
+			// Number - Amount of animation steps
+			animationSteps : 100,
+			// String - Animation easing effect
+			animationEasing : "easeOutBounce",
+			// Boolean - Whether we animate the rotation of the Doughnut
+			animateRotate : true,
+			// Boolean - Whether we animate scaling the Doughnut from the centre
+			animateScale : false,
+			// Boolean - whether to make the chart responsive to window resizing
+			responsive : true,
+			// Boolean - whether to maintain the starting aspect ratio or not
+			// when responsive, if set to false, will take up entire container
+			maintainAspectRatio : false,
+			// String - A legend template
+			legendTemplate : "<% for (var i=0; i<segments.length; i++){%><li><i class=\"fa fa-circle-o\" style=\"color:<%=segments[i].fillColor%>\"></i> <%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%>",
+			// String - A tooltip template
+			tooltipTemplate : "<%=value %> sessions with <%=label%>"
+		};
+
+		return pieOptions;
+	},
+
+	buildLegend : function(chart, $element) {
+		var legend = chart.generateLegend();
+		$element.append(legend);
+	}
+};
+
+function BrowserUsage(value, color, label) {
+	this.value = value;
+	this.color = color;
+	this.highlight = "#d2d6de";
+	this.label = label;
+}
+
+//***************************//
+//BROWSER USAGE WIDGET END	 //
+//***************************//
+
+//******************************//
+//RECENTLY ADDED PRODUCTS WIDGET//
+//******************************//
+var recenlyAddedProductsToBasket = {
+
+	URL : "/event/basket/recently-added",
+
+	show : function(elementId) {
+		this.init(elementId);
+	},
+
+	init : function(elementId) {
+		$.ajax({
+			url : recenlyAddedProductsToBasket.URL,
+			type : 'GET',
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(data) {
+				recenlyAddedProductsToBasket.build(data, elementId);
+			},
+			error : function() {
+				alert('error');
+			}
+		})
+	},
+
+	build : function(data, elementId) {
+		var items = '';
+		$.each(data, function(index, product) {
+			var currentItem = "<li class='item'><div class='product-img'><img src='http://placehold.it/50x50/d2d6de/ffffff' alt='Product Image'/></div><div class='product-info'>";
+			currentItem += "<a href='#' class='product-title'>";
+			currentItem += "SKU:" + product.sku;
+			currentItem += "<span class='label label-warning pull-right'>";
+			currentItem += "$" + product.price;
+			currentItem += "</span></a><span class='product-description'>";
+			currentItem += product.name;
+			currentItem += "</span></div></li>";
+			items += currentItem; 
+		});
+		$("#"+elementId + " .products-list").append(items);
+	}
+};
+
+//*******************************//
+//RECENTLY ADDED PRODUCTS END	 //
+//*******************************//
+
+//******************************//
+//		LATEST ORDER  WIDGET	//
+//******************************//
+var latestOrders = {
+
+	URL : "/event/order/latest",
+
+	show : function(elementId) {
+		this.init(elementId);
+	},
+
+	init : function(elementId) {
+		$.ajax({
+			url : latestOrders.URL,
+			type : 'GET',
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(data) {
+				latestOrders.build(data, elementId);
+			},
+			error : function() {
+				alert('error');
+			}
+		})
+	},
+
+	build : function(data, elementId) {
+		var items = '';
+		$.each(data, function(index, order) {
+			$.each(order.items, function(index, orderItem){
+				var currentItem = "<tr><td><a href='#'>" +
+				order.id +
+				"</a></td><td>" +
+				orderItem +
+				"</td><td><span class='label label-success'>Placed</span></td><td><div class='sparkbar' data-color='#00a65a' data-height='20'>90,80,90,-70,61,-83,63</div></td></tr>"
+			items += currentItem;
+			});
+		});
+		$("#"+elementId + " tbody").append(items);
+		spark.initBar($('.sparkbar'));
+	}
+};
+
+//*******************************//
+//	LATEST ORDER  WIDGET END	 //
+//*******************************//

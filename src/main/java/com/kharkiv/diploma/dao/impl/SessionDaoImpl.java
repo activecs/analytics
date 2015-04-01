@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kharkiv.diploma.dao.SessionDao;
 import com.kharkiv.diploma.dto.analytics.Session;
-import com.kharkiv.diploma.util.QueryNamesConstants.UserQueries;
+import com.kharkiv.diploma.util.QueryNamesConstants.SessionsQueries;
 
 @Repository("sessionDao")
 public class SessionDaoImpl implements SessionDao {
@@ -20,13 +20,13 @@ public class SessionDaoImpl implements SessionDao {
 
 	@Override
 	public List<Session> getAll() {
-		 TypedQuery<Session> query = em.createNamedQuery(UserQueries.GET_ALL, Session.class);
+		 TypedQuery<Session> query = em.createNamedQuery(SessionsQueries.GET_ALL, Session.class);
 	     return query.getResultList();
 	}
 
 	@Override
 	public Session geById(Integer id) {
-		 TypedQuery<Session> query = em.createNamedQuery(UserQueries.GET_BY_ID, Session.class);
+		 TypedQuery<Session> query = em.createNamedQuery(SessionsQueries.GET_BY_ID, Session.class);
 	     return query.setParameter("id", id).getSingleResult();
 	}
 
@@ -37,7 +37,7 @@ public class SessionDaoImpl implements SessionDao {
 
 	@Override
 	public int delete(Integer id) {
-		TypedQuery<Session> query = em.createNamedQuery(UserQueries.DELETE_BY_ID, Session.class);
+		TypedQuery<Session> query = em.createNamedQuery(SessionsQueries.DELETE_BY_ID, Session.class);
         return query.setParameter("id", id).executeUpdate();
 	}
 

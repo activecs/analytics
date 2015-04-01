@@ -1,5 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" %>
 <%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
+<%@ taglib tagdir="/WEB-INF/tags/widget" prefix="widget" %>
 <%@ attribute name="title" required="true" %>
 
 <!DOCTYPE html>

@@ -1,5 +1,8 @@
 <%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
+<%@ taglib tagdir="/WEB-INF/tags/widget" prefix="widget" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <template:meta/>
 <template:css/>
 
+<script type="text/javascript" src="<c:url value='/resources/plugins/jQuery/jQuery-2.1.3.min.js'/>"></script>

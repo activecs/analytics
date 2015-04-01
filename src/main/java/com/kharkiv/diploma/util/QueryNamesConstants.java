@@ -16,5 +16,26 @@ public final class QueryNamesConstants {
 		public static final String DELETE_BY_ID = "User.deleteById";
 		public static final String DELETE_BY_USERNAME = "User.deleteByUsername";
 	}
+	
+	public static class SessionsQueries {
+		private SessionsQueries() {
+		}
+
+		public static final String GET_ALL = "Session.getAll";
+		public static final String GET_BY_ID = "Session.getById";
+		public static final String DELETE_BY_ID = "Session.deleteById";
+	}
+	
+	public static class EventQueries {
+		private EventQueries() {
+		}
+
+		public static final String GET_ALL = "Event.getAll";
+		public static final String GET_BY_ID = "Event.getById";
+		public static final String GET_BY_CATEGORY_AND_ACTION = "Event.getByCategoryAndAction";
+		public static final String DELETE_BY_ID = "Event.deleteById";
+	}
+	
+	
 
 }

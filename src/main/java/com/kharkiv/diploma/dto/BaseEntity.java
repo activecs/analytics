@@ -15,6 +15,8 @@ import com.google.common.base.Objects;
 public abstract class BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 4974491906471746770L;
+	
+	public enum SortOrder {ASC, DESC}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,19 +18,10 @@ public class Navigation extends BaseEntity {
 
 	@Column(length = 50)
 	private String provider;
-	
-	@Column
 	private String device;
-	
-	@Column
 	private String browser;
-	
-	@Column
 	private String platform;
-	
-	@Column
 	private String language;
-	
 	@OneToOne
 	private Session session;
 

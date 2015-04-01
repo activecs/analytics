@@ -1,7 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script type="text/javascript" src="<c:url value='/resources/plugins/jQuery/jQuery-2.1.3.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/plugins/bootstrap/js/bootstrap.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/analitics.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/plugins/fastclick/fastclick.min.js'/>"></script>

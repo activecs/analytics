@@ -1,0 +1,10 @@
+USE analytics;
+SET SQL_SAFE_UPDATES=0;
+INSERT INTO visitor (age, trackingId) VALUES("20", "4656764467"),("25", "4656761467");
+INSERT INTO location (city, country) VALUES("Kharkiv", "Ukraine"),("Warszawa", "Poland");
+INSERT INTO navigation (browser, device, language, platform, provider)VALUES("Opera",   "PC", "uk", "Windows", "Kharkiv Online"),("Chrome",  "PC", "uk", "Windows", "Poland Online");
+INSERT INTO session (closed, open, status, location_id, navigation_id, visitor_id)VALUES("2015-03-20 15:00:00", "2017-03-20 14:00:00", 1, 1, 1, 1),("2015-03-19 15:00:00", "2015-03-19 14:00:00", 1, 2, 2, 2);
+UPDATE navigation SET session_id=1 WHERE id=1;
+UPDATE navigation SET session_id=2 WHERE id=2;
+INSERT INTO event (category, action, label, description, date, session_id) VALUES("basket", "add", "Product 1/23432423/456.34", "product number 1", "2015-03-20 15:00:00", "1"),("basket", "add", "Product 2/23432426/25", "product number 2", "2015-03-21 15:00:00", "2");
+INSERT INTO event (category, action, label, description, date, session_id) VALUES("order", "placed", "23432423", "345,345345", "2015-03-20 15:00:00", "1"),("order", "placed", "7684345234", "983984,8757634,542381", "2015-03-25 15:00:00", "2");
