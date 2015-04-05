@@ -31,7 +31,10 @@ public class PageView extends BaseEntity {
 	
 	@Column(name = "created", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar data;
+    private Calendar date;
+	
+	@Column
+	private String referer;
 
 	public Page getPage() {
 		return page;
@@ -49,12 +52,21 @@ public class PageView extends BaseEntity {
 		this.session = session;
 	}
 
-	public Calendar getData() {
-		return data;
+	public Calendar getDate() {
+		return date;
 	}
 
-	public void setData(Calendar data) {
-		this.data = data;
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
+
+	public String getReferer() {
+		return referer;
+	}
+
+	public void setReferer(String referer) {
+		this.referer = referer;
+	}
+	
 	
 }

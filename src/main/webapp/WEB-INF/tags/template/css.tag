@@ -3,7 +3,7 @@
 
 <link rel="stylesheet" href="<c:url value='/resources/plugins/bootstrap/css/bootstrap.min.css'/>" />
 <link rel="stylesheet" href="<c:url value='/resources/plugins/morris/morris.css'/>"/>
-<link rel="stylesheet" href="<c:url value='/resources/plugins/jvectormap/jquery-jvectormap-1.2.2.css'/>"/>
+<link rel="stylesheet" href="<c:url value='/resources/plugins/jvectormap/jquery-jvectormap-2.0.2.css'/>"/>
 <link rel="stylesheet" href="<c:url value='/resources/plugins/daterangepicker/daterangepicker-bs3.css'/>"/>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>

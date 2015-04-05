@@ -338,3 +338,89 @@ var latestOrders = {
 //*******************************//
 //	LATEST ORDER  WIDGET END	 //
 //*******************************//
+
+//*******************************//
+//	VISITORS REPORT  WIDGET 	 //
+//*******************************//
+
+var visitorsReport = {
+	
+	URL : "/visitor/report",
+
+	show : function(elementId) {
+		this.init(elementId);
+	},
+
+	init : function(elementId) {
+		$.ajax({
+			url : visitorsReport.URL,
+			type : 'GET',
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(data) {
+				visitorsReport.build(data, elementId);
+			},
+			error : function() {
+				alert('error');
+				visitorsReport.build(1, elementId);
+			}
+		})
+	},
+
+	build : function(data, elementId) {
+		var locationMarkers = new Array();
+		$.each(data.revisions, function(index, dataItem){
+			var description = dataItem.description + " - " + dataItem.amount + " visits";
+			locationMarkers.push(new Marker(dataItem.latitude,dataItem.longitude,description));				
+		});
+		
+		$('#' + elementId + ' .map-markers').vectorMap({
+		  map: 'world_mill_en',
+		  normalizeFunction: 'polynomial',
+		  hoverOpacity: 0.7,
+		  markersSelectable : true,
+		  hoverColor: false,
+		  backgroundColor: 'transparent',
+		  regionStyle: {
+		    initial: {
+		      fill: 'rgba(210, 214, 222, 1)',
+		      "fill-opacity": 1,
+		      stroke: 'none',
+		      "stroke-width": 0,
+		      "stroke-opacity": 1
+		    },
+		    hover: {
+		      fill: 'rgba(0,0,255,0.3)',
+		      "fill-opacity": 0.8,
+		      cursor: 'pointer'
+		    },
+		    selected: {
+		      fill: 'yellow'
+		    },
+		    selectedHover: {
+		    }
+		  },
+		  markerStyle: {
+		    initial: {
+		      fill: '#00a65a',
+		      stroke: '#111'
+		    }
+		  },
+		  markers: locationMarkers
+		});
+		
+		$('#' + elementId + ' .visits').html(data.visits);
+		$('#' + elementId + ' .referrals').html(data.referral + '%');
+		$('#' + elementId + ' .organic').html(data.organic + '%');
+	}	
+}
+
+function Marker(latitude, longitude, name) {
+	this.latLng = [latitude, longitude];
+	this.name = name;
+}
+
+//*******************************//
+//	VISITORS REPORT  WIDGET END	 //
+//*******************************//

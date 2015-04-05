@@ -34,6 +34,6 @@
 
 <script>
 $(function(){
-	latestOrders.init("${id}");
+	latestOrders.show("${id}");
 });
 </script>

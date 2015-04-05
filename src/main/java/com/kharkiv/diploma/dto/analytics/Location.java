@@ -20,9 +20,12 @@ public class Location extends BaseEntity {
 
 	@Column
 	private String country;
-	
 	@Column
 	private String city;
+	@Column
+	private Double longitude;
+	@Column
+	private Double latitude;
 	
 	@OneToMany
 	private Set<Session> sessions;
@@ -42,6 +45,22 @@ public class Location extends BaseEntity {
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
 
 	public Set<Session> getSessions() {
 		return sessions;
@@ -54,6 +73,37 @@ public class Location extends BaseEntity {
 	public void addSession(Session session){
 		session.setLocation(this);
 		sessions.add(session);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Location other = (Location) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		return true;
 	}
 	
 }

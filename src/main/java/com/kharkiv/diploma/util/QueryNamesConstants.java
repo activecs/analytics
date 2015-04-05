@@ -36,6 +36,12 @@ public final class QueryNamesConstants {
 		public static final String DELETE_BY_ID = "Event.deleteById";
 	}
 	
+	public static class OrganicRefererQueries {
+		private OrganicRefererQueries() {
+		}
+
+		public static final String GET_ALL = "OrganicReferer.getAll";
+	}
 	
 
 }

@@ -82,4 +82,6 @@
 		<property name="validationMessageSource" ref="messageSource" />
 	</bean>
 	
+	<bean id="geocoder" class="com.google.code.geocoder.Geocoder"/>
+	
 </beans>

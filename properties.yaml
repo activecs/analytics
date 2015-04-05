@@ -23,3 +23,6 @@ properties:
     database.username: root
     database.password: root
     database.url: jdbc:mysql://127.0.0.1:3306/analytics?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
+    geocode.client.id:  837863644970-6bj9gvgp9vcoc2dn877mphvmb8gtt83p.apps.googleusercontent.com
+    geocode.client.key: S3exl3ZsujO8juTAwvibdJi6
+    geocode.query.language: en
