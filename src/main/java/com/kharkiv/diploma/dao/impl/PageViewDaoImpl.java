@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kharkiv.diploma.dao.PageViewDao;
 import com.kharkiv.diploma.dto.analytics.PageView;
-import com.kharkiv.diploma.util.QueryNamesConstants.UserQueries;
+import com.kharkiv.diploma.util.QueryNamesConstants.PageViewQueries;
 
 @Repository("pageViewDao")
 public class PageViewDaoImpl implements PageViewDao {
@@ -20,13 +20,13 @@ public class PageViewDaoImpl implements PageViewDao {
 
 	@Override
 	public List<PageView> getAll() {
-		 TypedQuery<PageView> query = em.createNamedQuery(UserQueries.GET_ALL, PageView.class);
+		 TypedQuery<PageView> query = em.createNamedQuery(PageViewQueries.GET_ALL, PageView.class);
 	     return query.getResultList();
 	}
 
 	@Override
-	public PageView geById(Integer id) {
-		 TypedQuery<PageView> query = em.createNamedQuery(UserQueries.GET_BY_ID, PageView.class);
+	public PageView getById(Integer id) {
+		 TypedQuery<PageView> query = em.createNamedQuery(PageViewQueries.GET_BY_ID, PageView.class);
 	     return query.setParameter("id", id).getSingleResult();
 	}
 
@@ -37,7 +37,7 @@ public class PageViewDaoImpl implements PageViewDao {
 
 	@Override
 	public int delete(Integer id) {
-		TypedQuery<PageView> query = em.createNamedQuery(UserQueries.DELETE_BY_ID, PageView.class);
+		TypedQuery<PageView> query = em.createNamedQuery(PageViewQueries.DELETE_BY_ID, PageView.class);
         return query.setParameter("id", id).executeUpdate();
 	}
 

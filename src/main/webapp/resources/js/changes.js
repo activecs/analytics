@@ -273,7 +273,7 @@ var recenlyAddedProductsToBasket = {
 	build : function(data, elementId) {
 		var items = '';
 		$.each(data, function(index, product) {
-			var currentItem = "<li class='item'><div class='product-img'><img src='http://placehold.it/50x50/d2d6de/ffffff' alt='Product Image'/></div><div class='product-info'>";
+			var currentItem = "<li class='item'><div class='product-img'><img src='/resources/images/image-placeholder.jpg' alt='Product Image'/></div><div class='product-info'>";
 			currentItem += "<a href='#' class='product-title'>";
 			currentItem += "SKU:" + product.sku;
 			currentItem += "<span class='label label-warning pull-right'>";
@@ -423,4 +423,44 @@ function Marker(latitude, longitude, name) {
 
 //*******************************//
 //	VISITORS REPORT  WIDGET END	 //
+//*******************************//
+
+
+//******************************//
+//			INFO HEADER  WIDGET	//
+//******************************//
+var infoHeader = {
+
+	URL : "/event/info",
+	
+	show : function(elementId) {
+		this.init(elementId);
+	},
+	
+	init : function(elementId) {
+		$.ajax({
+			url : infoHeader.URL,
+			type : 'GET',
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(data) {
+				infoHeader.build(data, elementId);
+			},
+			error : function() {
+				alert('error');
+			}
+		})
+	},
+	
+	build : function(data, elementId) {
+		$("#" + elementId +" span.visits").html(data.visits);
+		$("#" + elementId +" span.sales").html(data.sales);
+		$("#" + elementId +" span.page-views").html(data.pageViews);
+		$("#" + elementId +" span.revenue").html(data.revenue);
+	}
+};
+
+//*******************************//
+//		INFO HEADER  WIDGET END	 //
 //*******************************//

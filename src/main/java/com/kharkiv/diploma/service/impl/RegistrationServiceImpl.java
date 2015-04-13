@@ -1,4 +1,4 @@
-package com.kharkiv.diploma.service;
+package com.kharkiv.diploma.service.impl;
 
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kharkiv.diploma.dto.user.Role;
 import com.kharkiv.diploma.dto.user.User;
+import com.kharkiv.diploma.service.RegistrationService;
+import com.kharkiv.diploma.service.UserService;
 
 @Transactional
 @Service("registrationService")

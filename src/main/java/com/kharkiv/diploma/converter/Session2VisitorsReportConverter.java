@@ -1,6 +1,7 @@
 package com.kharkiv.diploma.converter;
 
 import static java.math.BigDecimal.ONE;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,12 +19,11 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.kharkiv.diploma.dto.analytics.Location;
-import com.kharkiv.diploma.dto.analytics.PageView;
 import com.kharkiv.diploma.dto.analytics.Session;
 import com.kharkiv.diploma.dto.widget.VisitorReport;
 import com.kharkiv.diploma.dto.widget.VisitorRevision;
 import com.kharkiv.diploma.service.GeocodeService;
-import com.kharkiv.diploma.service.OrganicRefererService;
+import com.kharkiv.diploma.service.SessionService;
 
 @Component
 public class Session2VisitorsReportConverter implements Converter<List<Session>, VisitorReport> {
@@ -31,9 +31,9 @@ public class Session2VisitorsReportConverter implements Converter<List<Session>,
 	private static final Logger LOG = LoggerFactory.getLogger(Session2VisitorsReportConverter.class);
 	
 	@Inject
-	private OrganicRefererService organicRefererService; 
-	@Inject
 	private GeocodeService geocodeService;
+	@Inject
+	private SessionService sessionService;
 	
 	@Override
 	public VisitorReport convert(List<Session> source) {
@@ -59,28 +59,13 @@ public class Session2VisitorsReportConverter implements Converter<List<Session>,
 	private BigDecimal countOrganicViews(List<Session> source) {
 		int organicCounter = 0;
 		for(Session session : source)
-			if(hasPageViews(session) && isOrganic(session))
+			if(hasPageViews(session) && sessionService.isOrganic(session))
 				organicCounter++;
 		return BigDecimal.valueOf(organicCounter);
 	}
 
 	private boolean hasPageViews(Session session) {
 		return !session.getPageViews().isEmpty();
-	}
-
-	private boolean isOrganic(Session session) {
-		PageView firstView = getFirstViewFromSession(session);
-		String referer = firstView.getReferer();
-		return organicRefererService.isOrganic(referer);
-	}
-
-	private PageView getFirstViewFromSession(Session session) {
-		List<PageView> views = session.getPageViews();
-		PageView firstView = views.get(0);
-		for(PageView view : views)
-			if(view.getDate().before(firstView))
-				firstView = view;
-		return firstView;
 	}
 
 	private void populateRevisions(List<Session> source, VisitorReport report) {

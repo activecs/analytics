@@ -1,4 +1,4 @@
-package com.kharkiv.diploma.service;
+package com.kharkiv.diploma.service.impl;
 
 import static java.lang.String.format;
 import static org.springframework.util.Assert.notNull;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,10 @@ import com.google.code.geocoder.model.GeocodeResponse;
 import com.google.code.geocoder.model.GeocoderRequest;
 import com.google.code.geocoder.model.LatLng;
 import com.kharkiv.diploma.dto.analytics.Location;
+import com.kharkiv.diploma.service.GeocodeService;
 
 @Service
+@Transactional
 public class GeocodeServiceImpl implements GeocodeService {
 	
 	@Inject

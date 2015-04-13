@@ -25,7 +25,7 @@ public class SessionDaoImpl implements SessionDao {
 	}
 
 	@Override
-	public Session geById(Integer id) {
+	public Session getById(Integer id) {
 		 TypedQuery<Session> query = em.createNamedQuery(SessionsQueries.GET_BY_ID, Session.class);
 	     return query.setParameter("id", id).getSingleResult();
 	}

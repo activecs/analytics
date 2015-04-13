@@ -1,8 +1,9 @@
-package com.kharkiv.diploma.service;
+package com.kharkiv.diploma.service.impl;
 
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,11 @@ import com.kharkiv.diploma.dto.BaseEntity.SortOrder;
 import com.kharkiv.diploma.dto.analytics.Event;
 import com.kharkiv.diploma.dto.widget.Order;
 import com.kharkiv.diploma.dto.widget.Product;
+import com.kharkiv.diploma.service.EventService;
 import com.kharkiv.diploma.util.PaginationData;
 
 @Service
+@Transactional
 public class EventServiceImpl implements EventService {
 	
 	private static final String BASKET_EVENT_CATEGORY = "basket";

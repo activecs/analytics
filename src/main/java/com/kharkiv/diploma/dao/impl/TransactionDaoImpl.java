@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kharkiv.diploma.dao.TransactionDao;
 import com.kharkiv.diploma.dto.analytics.Transaction;
-import com.kharkiv.diploma.util.QueryNamesConstants.UserQueries;
+import com.kharkiv.diploma.util.QueryNamesConstants.TransactionQueries;
 
 @Repository("transactionDao")
 public class TransactionDaoImpl implements TransactionDao {
@@ -20,13 +20,13 @@ public class TransactionDaoImpl implements TransactionDao {
 
 	@Override
 	public List<Transaction> getAll() {
-		 TypedQuery<Transaction> query = em.createNamedQuery(UserQueries.GET_ALL, Transaction.class);
+		 TypedQuery<Transaction> query = em.createNamedQuery(TransactionQueries.GET_ALL, Transaction.class);
 	     return query.getResultList();
 	}
 
 	@Override
 	public Transaction geById(Integer id) {
-		 TypedQuery<Transaction> query = em.createNamedQuery(UserQueries.GET_BY_ID, Transaction.class);
+		 TypedQuery<Transaction> query = em.createNamedQuery(TransactionQueries.GET_BY_ID, Transaction.class);
 	     return query.setParameter("id", id).getSingleResult();
 	}
 
@@ -37,7 +37,7 @@ public class TransactionDaoImpl implements TransactionDao {
 
 	@Override
 	public int delete(Integer id) {
-		TypedQuery<Transaction> query = em.createNamedQuery(UserQueries.DELETE_BY_ID, Transaction.class);
+		TypedQuery<Transaction> query = em.createNamedQuery(TransactionQueries.DELETE_BY_ID, Transaction.class);
         return query.setParameter("id", id).executeUpdate();
 	}
 

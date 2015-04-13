@@ -1,4 +1,4 @@
-package com.kharkiv.diploma.service;
+package com.kharkiv.diploma.service.impl;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import com.kharkiv.diploma.converter.Session2VisitorsReportConverter;
 import com.kharkiv.diploma.dao.SessionDao;
 import com.kharkiv.diploma.dto.analytics.Session;
 import com.kharkiv.diploma.dto.widget.VisitorReport;
+import com.kharkiv.diploma.service.VisitorsReportService;
 
 @Service
 @Transactional

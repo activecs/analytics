@@ -43,5 +43,23 @@ public final class QueryNamesConstants {
 		public static final String GET_ALL = "OrganicReferer.getAll";
 	}
 	
+	public static class TransactionQueries {
+		private TransactionQueries() {
+		}
 
+		public static final String GET_ALL = "Transaction.getAll";
+		public static final String GET_BY_ID = "Transaction.getById";
+
+		public static final String DELETE_BY_ID = "Transaction.deleteById";
+	}
+	
+	public static class PageViewQueries {
+		private PageViewQueries() {
+		}
+
+		public static final String GET_ALL = "PageView.getAll";
+		public static final String GET_BY_ID = "PageView.getById";
+
+		public static final String DELETE_BY_ID = "PageView.deleteById";
+	}
 }

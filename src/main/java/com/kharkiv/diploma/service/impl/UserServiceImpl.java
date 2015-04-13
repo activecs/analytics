@@ -1,25 +1,20 @@
-package com.kharkiv.diploma.service;
+package com.kharkiv.diploma.service.impl;
 
-import static com.kharkiv.diploma.util.Constants.CACHE_NAME;
-import static com.kharkiv.diploma.util.Constants.USER_CACHE_CONDITION;
-import static com.kharkiv.diploma.util.Constants.USER_CACHE_KEY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kharkiv.diploma.dao.UserDao;
 import com.kharkiv.diploma.dto.user.User;
+import com.kharkiv.diploma.service.UserService;
 
-@Service("userService")
 @Transactional
+@Service("userService")
 public class UserServiceImpl implements UserService {
 
     private static final String ERR_MESSAGE_USER_ID_CANNOT_BE_NULL = "User id cannot be null";

@@ -8,7 +8,7 @@ public interface SessionDao {
 
 	List<Session> getAll();
 
-	Session geById(Integer id);
+	Session getById(Integer id);
 
 	void delete(Session session);
 

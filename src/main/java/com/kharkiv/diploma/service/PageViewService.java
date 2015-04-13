@@ -1,14 +1,14 @@
-package com.kharkiv.diploma.dao;
+package com.kharkiv.diploma.service;
 
 import java.util.List;
 
 import com.kharkiv.diploma.dto.analytics.PageView;
 
-public interface PageViewDao {
-
+public interface PageViewService {
+	
 	List<PageView> getAll();
 
-	PageView getById(Integer id);
+	PageView geById(Integer id);
 
 	void delete(PageView pageView);
 
@@ -17,4 +17,5 @@ public interface PageViewDao {
 	PageView add(PageView pageView);
 
 	PageView update(PageView pageView);
+	
 }
