@@ -1,6 +1,11 @@
 package com.kharkiv.diploma.service.impl;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.lang.Integer.MAX_VALUE;
+
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -27,6 +32,7 @@ public class EventServiceImpl implements EventService {
 	private static final String ORDER_EVENT_CATEGORY = "order";
 	private static final String ORDER_EVENT_PLACED_ACTTION = "placed";
 	private static final String SORT_BY_DATE = "date";
+	private static final String SORT_LABEL = "label";
 
 	@Value("${product.default.treshold:50}")
 	private int defaultProductTreshold;
@@ -36,6 +42,18 @@ public class EventServiceImpl implements EventService {
 	private Event2ProductConverter eventToProductConverter;
 	@Inject
 	private Event2OrderConverter eventToOrderConverter;
+	
+	@Override
+	public List<Product> getAllProducts(int maxAmount) {
+		PaginationData paginationData = buildPaginationData(SORT_LABEL, SortOrder.ASC, maxAmount);
+		Set<Product> uniqueProducts = newHashSet(getConvertedProducts(paginationData));
+		return newArrayList(uniqueProducts); 
+	}
+	
+	@Override
+	public List<Product> getAllProducts() {
+		return getAllProducts(MAX_VALUE);
+	}
 	
 	@Override
 	public List<Product> getAllRecentlyAddedToBasketProducts(int maxAmount) {

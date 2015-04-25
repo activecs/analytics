@@ -1,5 +1,10 @@
 $(function() {
-	
+	$('#reservation').daterangepicker({ 
+		format: 'DD/MM/YYYY',
+		startDate: '01/01/2015',
+		endDate: moment().format('DD/MM/YYYY') 
+	});
+	settings.init();
 });
 
 var common = {
@@ -464,3 +469,121 @@ var infoHeader = {
 //*******************************//
 //		INFO HEADER  WIDGET END	 //
 //*******************************//
+
+//******************************//
+//			SETTINGS			//
+//******************************//
+var settings = {
+	
+	URL : "/setup/apply",
+	
+	init : function(){
+		$("#productSelect").change(function(){
+			if(settings.isValid())
+				settings.apply();
+		});
+		$("#reservation").on('apply.daterangepicker', function(ev, picker) {
+			if(settings.isValid())
+				settings.apply();
+		});
+	},
+	
+	getCurrentSettings : function(){
+		
+	},
+	
+	apply : function(){
+		var jsonData = 	JSON.stringify(settings.build());	
+		$.ajax({
+			url : settings.URL,
+			type : 'POST',
+			data : jsonData,
+			contentType: "application/json; charset=utf-8",
+			processData : false,
+			success : function(data) {
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		})
+	},
+	
+	build : function(){
+		var dateFromTo = $('#reservation').val();
+		var dateFrom = dateFromTo.substring(0,10);
+		var dateTo = dateFromTo.substring(13,24);
+		var productId = $("#productSelect").val();
+		return new Settings(dateFrom, dateTo, productId);
+	},
+	
+	isValid : function(){
+		var data = settings.build();
+		if(data.from && data.to)
+			return true;
+		else
+			return false;
+	}
+};
+
+function Settings (from, to, productId) {
+    this.from = from;
+    this.to = to;
+    this.productId = productId;
+}
+//******************************//
+//		END SETTINGS			//
+//******************************//
+
+
+/*
+ * BAR CHART
+ * ---------
+ */
+var bar_data = {
+  data: [["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9]],
+  color: "#3c8dbc"
+};
+
+$.plot("#bar-chart", [bar_data], {
+  grid: {
+    borderWidth: 1,
+    borderColor: "#f3f3f3",
+    tickColor: "#f3f3f3"
+  },
+  series: {
+    bars: {
+      show: true,
+      barWidth: 0.5,
+      align: "center"
+    }
+  },
+  xaxis: {
+    mode: "categories",
+    tickLength: 0
+  }
+});
+/* END BAR CHART */
+
+// LINE CHART
+var line = new Morris.Line({
+  element: 'line-chart',
+  resize: true,
+  data: [
+    {y: '2011 Q1', item1: 2666},
+    {y: '2011 Q2', item1: 2778},
+    {y: '2011 Q3', item1: 4912},
+    {y: '2011 Q4', item1: 3767},
+    {y: '2012 Q1', item1: 6810},
+    {y: '2012 Q2', item1: 5670},
+    {y: '2012 Q3', item1: 4820},
+    {y: '2012 Q4', item1: 15073},
+    {y: '2013 Q1', item1: 10687},
+    {y: '2013 Q2', item1: 8432}
+  ],
+  xkey: 'y',
+  ykeys: ['item1'],
+  labels: ['Item 1'],
+  lineColors: ['#3c8dbc'],
+  hideHover: 'auto'
+});
+

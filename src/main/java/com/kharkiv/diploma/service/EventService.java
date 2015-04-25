@@ -14,4 +14,8 @@ public interface EventService {
 	List<Order> getAllLatestOrders();
 	
 	List<Order> getAllLatestOrders(int maxAmount);
+
+	List<Product> getAllProducts();
+
+	List<Product> getAllProducts(int maxAmount);
 }
