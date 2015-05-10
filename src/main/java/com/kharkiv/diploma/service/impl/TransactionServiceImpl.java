@@ -1,18 +1,28 @@
 package com.kharkiv.diploma.service.impl;
 
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.math.BigDecimal.ZERO;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Predicate;
 import com.kharkiv.diploma.dao.TransactionDao;
 import com.kharkiv.diploma.dto.analytics.Transaction;
 import com.kharkiv.diploma.dto.analytics.TransactionEntry;
+import com.kharkiv.diploma.dto.widget.Product;
 import com.kharkiv.diploma.service.CurrencyService;
 import com.kharkiv.diploma.service.TransactionService;
 
@@ -31,6 +41,68 @@ public class TransactionServiceImpl implements TransactionService {
 		for(Transaction transaction : transactions)
 			updateRevenue(transaction);
 		return transactions;
+	}
+	
+	@Override
+	public List<Transaction> getAllForProduct(Product product) {
+		List<Transaction> transactions = getAll();
+		Collection<Transaction> transactionWithProduct = filter(transactions, new TransactionProductFilter(product.getSKU()));
+		return newArrayList(transactionWithProduct);
+	}
+	
+	
+	private class TransactionProductFilter implements Predicate<Transaction> {
+		private String productSKU;
+		
+		public TransactionProductFilter(String productSKU) {
+			this.productSKU = productSKU;
+		}
+		
+		@Override
+		public boolean apply(Transaction transaction) {
+			Set<TransactionEntry> transactionEntries = transaction.getEntries();
+			Collection<TransactionEntry> entriesWithProduct = filter(transactionEntries, new TransactionEntryProductFilter(productSKU)); 			
+			return isNotEmpty(entriesWithProduct);
+		}
+	}
+	
+	@Override
+	public List<TransactionEntry> filterEntriesWithProduct(Transaction transaction, Product product) {
+		Collection<TransactionEntry> entriesWithProduct = filter(transaction.getEntries(), new TransactionEntryProductFilter(product.getSKU()));
+		return newArrayList(entriesWithProduct);
+	}
+	
+	private class TransactionEntryProductFilter implements Predicate<TransactionEntry> {
+		private String productSKU;
+		
+		public TransactionEntryProductFilter(String productSKU) {
+			this.productSKU = productSKU;
+		}
+		
+		@Override
+		public boolean apply(TransactionEntry entry) {
+			return productSKU.equalsIgnoreCase(entry.getSKU());
+		}
+	}
+
+	@Override
+	public List<Transaction> getAllForProduct(Product product, Date date) {
+		List<Transaction> transactionWithProduct = getAllForProduct(product);
+		return newArrayList(filter(transactionWithProduct, new TransactionDateFilter(date)));
+	}
+	
+	private class TransactionDateFilter implements Predicate<Transaction> {
+		private Date date;
+		
+		public TransactionDateFilter(Date date) {
+			this.date = date;
+		}
+		
+		@Override
+		public boolean apply(Transaction item) {
+			Calendar transactionDate = item.getSession().getOpen();
+			return DateUtils.isSameDay(transactionDate.getTime(), date);
+		}
 	}
 
 	@Override
@@ -97,5 +169,5 @@ public class TransactionServiceImpl implements TransactionService {
 			totalRevenue = totalRevenue.add(transaction.getRevenue());
 		return totalRevenue;
 	}
-	
+
 }

@@ -5,6 +5,7 @@ $(function() {
 		endDate: moment().format('DD/MM/YYYY') 
 	});
 	settings.init();
+	salesPerDay.build();
 });
 
 var common = {
@@ -475,9 +476,11 @@ var infoHeader = {
 //******************************//
 var settings = {
 	
-	URL : "/setup/apply",
+	URL : "/settings",
+	PRODUCTS_URL : "/settings/products",
 	
 	init : function(){
+		settings.downloadProducts();
 		$("#productSelect").change(function(){
 			if(settings.isValid())
 				settings.apply();
@@ -488,8 +491,40 @@ var settings = {
 		});
 	},
 	
-	getCurrentSettings : function(){
-		
+	setCurrentSettings : function(){
+		$.ajax({
+			url : settings.URL,
+			type : 'GET',
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				console.log(data);
+				var dateFromTo = data.from + " - " + data.to;
+				$('#reservation').val(dateFromTo);
+				$("#productSelect option[value='"+data.productSku+"']").prop('selected', true);
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		});
+	},
+	
+	downloadProducts : function(){
+		$.ajax({
+			url : settings.PRODUCTS_URL,
+			type : 'GET',
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				console.log(data);
+				$.each(data, function(index, item) {
+					product = new Option(item.name, item.sku);
+					$("#productSelect").append($(product));
+				});
+				settings.setCurrentSettings();
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		});
 	},
 	
 	apply : function(){
@@ -564,26 +599,45 @@ $.plot("#bar-chart", [bar_data], {
 });
 /* END BAR CHART */
 
-// LINE CHART
-var line = new Morris.Line({
-  element: 'line-chart',
-  resize: true,
-  data: [
-    {y: '2011 Q1', item1: 2666},
-    {y: '2011 Q2', item1: 2778},
-    {y: '2011 Q3', item1: 4912},
-    {y: '2011 Q4', item1: 3767},
-    {y: '2012 Q1', item1: 6810},
-    {y: '2012 Q2', item1: 5670},
-    {y: '2012 Q3', item1: 4820},
-    {y: '2012 Q4', item1: 15073},
-    {y: '2013 Q1', item1: 10687},
-    {y: '2013 Q2', item1: 8432}
-  ],
-  xkey: 'y',
-  ykeys: ['item1'],
-  labels: ['Item 1'],
-  lineColors: ['#3c8dbc'],
-  hideHover: 'auto'
-});
+// SALES PER DAY LINE CHART
+
+var salesPerDay = {
+		
+	URL : "/sales/per-day",
+	
+	getData : function(){
+		$.ajax({
+			url : salesPerDay.URL,
+			type : 'GET',
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				console.log(data);
+				$.each(data, function(index, item) {
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		});
+	},
+	
+	build : function(){
+		var chartData = salesPerDay.getData();
+		var line = new Morris.Line({
+		  element: 'line-chart',
+		  resize: true,
+		  data: [
+		    {y: '2012 Q4', item1: 15073},
+		    {y: '2013 Q1', item1: 10687},
+		    {y: '2013 Q2', item1: 8432}
+		  ],
+		  xkey: 'y',
+		  ykeys: ['item1'],
+		  labels: ['Item 1'],
+		  lineColors: ['#3c8dbc'],
+		  hideHover: 'auto'
+		});
+	} 	
+};
+
 

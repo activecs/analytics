@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class DateSerializer extends JsonSerializer<Date> {
 	 
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM//yyyy");
+    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
  
     @Override
     public void serialize (Date value, JsonGenerator gen, SerializerProvider arg2) throws IOException {

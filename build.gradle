@@ -116,6 +116,7 @@ dependencies {
     compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.2.Final'
     compile group: 'org.apache.commons', 				name:'commons-lang3', 					version:'3.3.2'
+    compile group: 'org.apache.commons',                name:'commons-math3',                   version:'3.5'
     compile group: 'commons-collections', 				name:'commons-collections', 			version:'3.2.1'
     compile group: 'com.google.guava', 					name:'guava', 							version:'18.0'
     compile group: 'com.fasterxml.jackson.core',		name:'jackson-core',					version:jacksonVersion

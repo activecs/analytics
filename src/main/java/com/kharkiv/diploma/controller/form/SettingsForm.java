@@ -15,7 +15,7 @@ public class SettingsForm {
 	@JsonSerialize(using = DateSerializer.class)
 	private Date to;
 
-	private String productId;
+	private String productSku;
 
 	public Date getFrom() {
 		return from;
@@ -33,12 +33,12 @@ public class SettingsForm {
 		this.to = to;
 	}
 
-	public String getProductId() {
-		return productId;
+	public String getProductSku() {
+		return productSku;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setProductSku(String productSku) {
+		this.productSku = productSku;
 	}
 
 }

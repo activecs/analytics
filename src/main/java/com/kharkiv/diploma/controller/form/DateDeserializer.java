@@ -3,8 +3,6 @@ package com.kharkiv.diploma.controller.form;
 import java.io.IOException;
 import java.util.Date;
 
-import javax.inject.Inject;
-
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -13,13 +11,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.kharkiv.diploma.service.EventService;
 
 @Configurable
 public class DateDeserializer extends JsonDeserializer<Date> {
-	
-	@Inject
-	private EventService event;
 	
     private static DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 

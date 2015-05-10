@@ -32,9 +32,6 @@
                <div class="form-group">
                  <label>Select Product</label>
                  <select class="form-control" id="productSelect">
-                   <option>option 1</option>
-                   <option>option 2</option>
-                   <option>option 3</option>
                  </select>
                </div>
            </div><!-- /.box-body -->
