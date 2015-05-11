@@ -5,15 +5,15 @@ import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.kharkiv.diploma.controller.form.DateDeserializer;
-import com.kharkiv.diploma.controller.form.DateSerializer;
+import com.kharkiv.diploma.controller.form.MorrisDateSerializer;
+import com.kharkiv.diploma.controller.form.MorrisDateDeserializer;
 
 public class SalesForDay implements Serializable {
 
 	private static final long serialVersionUID = 5518752410511188348L;
 
-	@JsonDeserialize(using = DateDeserializer.class)
-	@JsonSerialize(using = DateSerializer.class)
+	@JsonDeserialize(using = MorrisDateDeserializer.class)
+	@JsonSerialize(using = MorrisDateSerializer.class)
 	private Date date;
 	private Integer amount;
 	private Product product;

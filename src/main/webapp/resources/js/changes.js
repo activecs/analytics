@@ -2,10 +2,17 @@ $(function() {
 	$('#reservation').daterangepicker({ 
 		format: 'DD/MM/YYYY',
 		startDate: '01/01/2015',
-		endDate: moment().format('DD/MM/YYYY') 
+		endDate: moment().format('DD/MM/YYYY'),
+		dateLimit: { days: 14 },
+		locale: {
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            firstDay: 1
+        }
 	});
 	settings.init();
-	salesPerDay.build();
+	salesPerDay.init();
+	salesAmountDistribution.init();
 });
 
 var common = {
@@ -477,7 +484,6 @@ var infoHeader = {
 var settings = {
 	
 	URL : "/settings",
-	PRODUCTS_URL : "/settings/products",
 	
 	init : function(){
 		settings.downloadProducts();
@@ -510,7 +516,7 @@ var settings = {
 	
 	downloadProducts : function(){
 		$.ajax({
-			url : settings.PRODUCTS_URL,
+			url : settings.URL + '/products',
 			type : 'GET',
 			contentType: "application/json; charset=utf-8",
 			success : function(data) {
@@ -530,12 +536,13 @@ var settings = {
 	apply : function(){
 		var jsonData = 	JSON.stringify(settings.build());	
 		$.ajax({
-			url : settings.URL,
+			url : settings.URL + '/apply',
 			type : 'POST',
 			data : jsonData,
 			contentType: "application/json; charset=utf-8",
 			processData : false,
 			success : function(data) {
+				location.reload(true);
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				alert(textStatus + '\n' + errorThrown);
@@ -547,8 +554,8 @@ var settings = {
 		var dateFromTo = $('#reservation').val();
 		var dateFrom = dateFromTo.substring(0,10);
 		var dateTo = dateFromTo.substring(13,24);
-		var productId = $("#productSelect").val();
-		return new Settings(dateFrom, dateTo, productId);
+		var productSku = $("#productSelect").val();
+		return new Settings(dateFrom, dateTo, productSku);
 	},
 	
 	isValid : function(){
@@ -560,10 +567,10 @@ var settings = {
 	}
 };
 
-function Settings (from, to, productId) {
+function Settings (from, to, productSku) {
     this.from = from;
     this.to = to;
-    this.productId = productId;
+    this.productSku = productSku;
 }
 //******************************//
 //		END SETTINGS			//
@@ -571,49 +578,25 @@ function Settings (from, to, productId) {
 
 
 /*
- * BAR CHART
+ * SALES AMOUNT BAR CHART
  * ---------
  */
-var bar_data = {
-  data: [["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9]],
-  color: "#3c8dbc"
-};
 
-$.plot("#bar-chart", [bar_data], {
-  grid: {
-    borderWidth: 1,
-    borderColor: "#f3f3f3",
-    tickColor: "#f3f3f3"
-  },
-  series: {
-    bars: {
-      show: true,
-      barWidth: 0.5,
-      align: "center"
-    }
-  },
-  xaxis: {
-    mode: "categories",
-    tickLength: 0
-  }
-});
-/* END BAR CHART */
-
-// SALES PER DAY LINE CHART
-
-var salesPerDay = {
+var salesAmountDistribution = {
 		
-	URL : "/sales/per-day",
+	URL : "/sales/distribution",
 	
-	getData : function(){
+	init : function(){
 		$.ajax({
-			url : salesPerDay.URL,
+			url : salesAmountDistribution.URL,
 			type : 'GET',
 			contentType: "application/json; charset=utf-8",
 			success : function(data) {
-				console.log(data);
+				var chartData = [];
 				$.each(data, function(index, item) {
+					chartData.push(new SalesDistribution(item.amount, item.dayNumber));
 				});
+				salesAmountDistribution.build(chartData);
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				alert(textStatus + '\n' + errorThrown);
@@ -621,23 +604,157 @@ var salesPerDay = {
 		});
 	},
 	
-	build : function(){
-		var chartData = salesPerDay.getData();
-		var line = new Morris.Line({
-		  element: 'line-chart',
-		  resize: true,
-		  data: [
-		    {y: '2012 Q4', item1: 15073},
-		    {y: '2013 Q1', item1: 10687},
-		    {y: '2013 Q2', item1: 8432}
-		  ],
-		  xkey: 'y',
-		  ykeys: ['item1'],
-		  labels: ['Item 1'],
-		  lineColors: ['#3c8dbc'],
-		  hideHover: 'auto'
+	build : function(chartData){
+		var bar = Morris.Bar({
+			element: "bar-chart",
+			data: chartData,
+			xkey: 'amount',
+			ykeys: ['dayNumber'],
+			labels: ['number of days'],
+			hideHover: 'auto',
+			postUnits: [' days'],
+			hoverCallback: function (index, options, content, row) {
+			  return row.dayNumber + " days we sold " + row.amount + " products";
+			}
 		});
 	} 	
 };
 
+function SalesDistribution(amount, dayNumber) {
+	this.amount = amount;
+	this.dayNumber = dayNumber;
+}
 
+function SalesDistributionChartData(data) {
+	this.data = data;
+	this.color = "#3c8dbc"
+}
+
+var bar_data = {
+  data: [["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9]],
+  color: "#3c8dbc"
+};
+
+
+/* SALES AMOUNT BAR CHART */
+
+// SALES PER DAY LINE CHART
+
+var salesPerDay = {
+		
+	URL : "/sales/per-day",
+	
+	init : function(){
+		$.ajax({
+			url : salesPerDay.URL,
+			type : 'GET',
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				var chartData = [];
+				$.each(data, function(index, item) {
+					chartData.push(new SalesPerDayData(item.date, item.amount, item.product.name));
+				});
+				salesPerDay.build(chartData);
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		});
+	},
+	
+	build : function(chartData){
+		var line = new Morris.Line({
+		  element: 'line-chart',
+		  resize: true,
+		  data: chartData,
+		  xkey: 'date',
+		  ykeys: ['amount'],
+		  labels: ['sold amount'],
+		  xlabels: ['day'],
+		  postUnits: [' pcs'],
+		  lineColors: ['#3c8dbc'],
+		  hideHover: 'auto',
+		  gridIntegers: true,
+		  ymin: 0
+		});
+	} 	
+};
+
+function SalesPerDayData(date, amount, label) {
+	this.date = date;
+	this.amount = amount;
+	this.label = label;
+}
+
+// END SALES PER DAY LINE CHART
+
+//-----------------------
+//- MONTHLY SALES CHART -
+//-----------------------
+
+// Get context with jQuery - using jQuery's .get() method.
+var salesChartCanvas = $("#salesChart").get(0).getContext("2d");
+// This will get the first returned node in the jQuery collection.
+var salesChart = new Chart(salesChartCanvas);
+
+var salesChartData = {
+  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  datasets: [
+    {
+      label: "Digital Goods",
+      fillColor: "rgba(60,141,188,0.9)",
+      strokeColor: "rgba(60,141,188,0.8)",
+      pointColor: "#3b8bba",
+      pointStrokeColor: "rgba(60,141,188,1)",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(60,141,188,1)",
+      data: [28, 48, 40, 19, 86, 27, 90]
+    }
+  ]
+};
+
+var salesChartOptions = {
+  //Boolean - If we should show the scale at all
+  showScale: true,
+  //Boolean - Whether grid lines are shown across the chart
+  scaleShowGridLines: false,
+  //String - Colour of the grid lines
+  scaleGridLineColor: "rgba(0,0,0,.05)",
+  //Number - Width of the grid lines
+  scaleGridLineWidth: 1,
+  //Boolean - Whether to show horizontal lines (except X axis)
+  scaleShowHorizontalLines: true,
+  //Boolean - Whether to show vertical lines (except Y axis)
+  scaleShowVerticalLines: true,
+  //Boolean - Whether the line is curved between points
+  bezierCurve: true,
+  //Number - Tension of the bezier curve between points
+  bezierCurveTension: 0.3,
+  //Boolean - Whether to show a dot for each point
+  pointDot: false,
+  //Number - Radius of each point dot in pixels
+  pointDotRadius: 4,
+  //Number - Pixel width of point dot stroke
+  pointDotStrokeWidth: 1,
+  //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+  pointHitDetectionRadius: 20,
+  //Boolean - Whether to show a stroke for datasets
+  datasetStroke: true,
+  //Number - Pixel width of dataset stroke
+  datasetStrokeWidth: 2,
+  //Boolean - Whether to fill the dataset with a color
+  datasetFill: true,
+  //String - A legend template
+  legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%=datasets[i].label%></li><%}%></ul>",
+  //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+  maintainAspectRatio: false,
+  //Boolean - whether to make the chart responsive to window resizing
+  responsive: true
+};
+
+//Create the line chart
+salesChart.Line(salesChartData, salesChartOptions);
+
+//---------------------------
+//- END MONTHLY SALES CHART -
+//---------------------------

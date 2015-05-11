@@ -17,7 +17,7 @@ import com.kharkiv.diploma.dto.widget.Product;
 @Component
 public class Event2ProductConverter implements Converter<List<Event>, List<Product>> {
 
-	private Pattern productNameAndSKUPattern = Pattern.compile("(.*)/(.*)/(\\d+(.\\d*)?)");
+	private Pattern productNameSkuPricePattern = Pattern.compile("(.*)/(.*)/(\\d+(.\\d*)?)");
 
 	@Override
 	public List<Product> convert(List<Event> source) {
@@ -36,21 +36,21 @@ public class Event2ProductConverter implements Converter<List<Event>, List<Produ
 	}
 
 	private String parseProductName(String productNameAndSKUAndPrice) {
-		Matcher matcher = productNameAndSKUPattern.matcher(productNameAndSKUAndPrice);
+		Matcher matcher = productNameSkuPricePattern.matcher(productNameAndSKUAndPrice);
 		if(matcher.find())
 			return matcher.group(1);
 		return EMPTY;
 	}
 	
 	private String parseProductSKU(String productNameAndSKUAndPrice) {
-		Matcher matcher = productNameAndSKUPattern.matcher(productNameAndSKUAndPrice);
+		Matcher matcher = productNameSkuPricePattern.matcher(productNameAndSKUAndPrice);
 		if(matcher.find())
 			return matcher.group(2);
 		return EMPTY;
 	}
 	
 	private String parseProductBasePrice(String productNameAndSKUAndPrice) {
-		Matcher matcher = productNameAndSKUPattern.matcher(productNameAndSKUAndPrice);
+		Matcher matcher = productNameSkuPricePattern.matcher(productNameAndSKUAndPrice);
 		if(matcher.find())
 			return matcher.group(3);
 		return "0";

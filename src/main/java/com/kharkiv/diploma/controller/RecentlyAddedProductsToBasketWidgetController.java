@@ -19,7 +19,7 @@ public class RecentlyAddedProductsToBasketWidgetController extends EventAbstract
 	
 	@RequestMapping(value="/basket/recently-added", method=RequestMethod.GET)
 	public List<Product> getRecentlyAddedProducts(){
-		return eventService.getAllRecentlyAddedToBasketProducts();
+		return eventService.getAllRecentlyAddedToBasketProducts(5);
 	}
 	
 }
