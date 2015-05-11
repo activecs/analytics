@@ -1,7 +1,10 @@
 package com.kharkiv.diploma.service.impl;
 
+import static com.google.common.math.DoubleMath.mean;
 import static java.util.Collections.sort;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -13,11 +16,13 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.primitives.Doubles;
 import com.kharkiv.diploma.converter.Array2SalesApproximationConverter;
 import com.kharkiv.diploma.converter.SalesDistribution2ArrayConverter;
 import com.kharkiv.diploma.converter.SalesForDay2SalesDistributionConverter;
 import com.kharkiv.diploma.dto.analytics.Transaction;
 import com.kharkiv.diploma.dto.analytics.TransactionEntry;
+import com.kharkiv.diploma.dto.widget.DistributionParameters;
 import com.kharkiv.diploma.dto.widget.Product;
 import com.kharkiv.diploma.dto.widget.SalesApproximation;
 import com.kharkiv.diploma.dto.widget.SalesDistribution;
@@ -100,5 +105,37 @@ public class SalesServiceImpl implements SalesService {
 		double[][] approximatedResult = approximatonService.approximate(distribution2ArrayConverter.convert(distribution));
 		return array2SalesApproximationConverter.convert(approximatedResult);
 	}
-		
+
+	@Override
+	public DistributionParameters getDistributionParameters(Date startDate,	Date endDate, Product product) {
+		DistributionParameters parameters = new DistributionParameters();
+		List<SalesForDay> salesDistribution = getSales(startDate, endDate, product);
+		double[] distributionValues = getSalesAmount(salesDistribution);
+		parameters.setSigma(mean(distributionValues));
+		parameters.setMin(Doubles.min(distributionValues));
+		parameters.setMax(Doubles.max(distributionValues));
+		parameters.setDispersion(standardDeviation(distributionValues));
+		return parameters;
+	}
+
+	private double[] getSalesAmount(List<SalesForDay> salesDistribution) {
+		double[] distributionValues = new double[salesDistribution.size()];
+		for(int i = 0; i<salesDistribution.size(); i++){
+			SalesForDay sale = salesDistribution.get(i);
+			distributionValues[i] = sale.getAmount();
+		}
+		return distributionValues;
+	}
+
+	private Double standardDeviation(double[] values) {
+		double arithmeticMean = mean(values);
+		double deviation = 0d;
+		for(int i=0; i<values.length; i++)
+			deviation += Math.pow((values[i] - arithmeticMean), 2);
+		deviation = deviation/(values.length - 1);
+		deviation = Math.sqrt(deviation);
+		BigDecimal standardDeviation = new BigDecimal(deviation);
+		return standardDeviation.setScale(3,RoundingMode.HALF_UP).doubleValue();
+	}
+	
 }

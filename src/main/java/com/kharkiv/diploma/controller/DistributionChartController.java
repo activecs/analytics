@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kharkiv.diploma.dto.widget.DistributionParameters;
 import com.kharkiv.diploma.dto.widget.SalesApproximation;
 import com.kharkiv.diploma.dto.widget.SalesDistribution;
 import com.kharkiv.diploma.dto.widget.SalesForDay;
@@ -17,7 +18,7 @@ import com.kharkiv.diploma.service.SalesService;
 
 @RestController
 @RequestMapping("/sales")
-public class SalesChartController {
+public class DistributionChartController {
 	
 	private static final String SETTINGS_PROPERTY = "settings";
 	@Inject
@@ -39,5 +40,11 @@ public class SalesChartController {
 	public List<SalesApproximation> getApproximatedDistribution(HttpSession session){
 		Settings settings = (Settings) session.getAttribute(SETTINGS_PROPERTY);
 		return salesService.getApproximatedDistribution(settings.getFrom(), settings.getTo(), settings.getProduct());
+	}
+	
+	@RequestMapping(value="/distribution/parameters", method=RequestMethod.GET)
+	public DistributionParameters getDistributionParameters(HttpSession session){
+		Settings settings = (Settings) session.getAttribute(SETTINGS_PROPERTY);
+		return salesService.getDistributionParameters(settings.getFrom(), settings.getTo(), settings.getProduct());
 	}
 }

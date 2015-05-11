@@ -14,6 +14,7 @@ $(function() {
 	salesPerDay.init();
 	salesAmountDistribution.init();
 	salesDistributed.init();
+	distributionParameters.init();
 });
 
 var common = {
@@ -806,3 +807,37 @@ function SalesApproximated(x, y) {
 	this.y = y;
 }
 // END SALES PER DAY LINE CHART
+
+//---------------------------
+//- DISTRIBUTION PARAMETERS -
+//---------------------------
+
+var distributionParameters = {
+	URL : "/sales/distribution/parameters",
+	
+	init : function(){
+		$.ajax({
+			url : distributionParameters.URL,
+			type : 'GET',
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				distributionParameters.build(data);
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		});
+	},
+	
+	build : function(data){
+		console.log(data);
+		$('.distribution .min').html(data.min);
+		$('.distribution .max').html(data.max);
+		$('.distribution .sigma').html(data.sigma);
+		$('.distribution .dispersion').html(data.dispersion);
+	}
+}
+
+//---------------------------
+//- END DISTRIBUTION PARAMETERS -
+//---------------------------
