@@ -1,7 +1,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/template" prefix="template"%>
 
 <div class="pull-right hidden-xs">
-    Anything you want
+    Eduard Dereza
 </div>
 <!-- Default to the left --> 
 <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.

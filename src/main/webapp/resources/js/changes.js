@@ -13,6 +13,7 @@ $(function() {
 	settings.init();
 	salesPerDay.init();
 	salesAmountDistribution.init();
+	salesDistributed.init();
 });
 
 var common = {
@@ -639,7 +640,6 @@ var bar_data = {
 /* SALES AMOUNT BAR CHART */
 
 // SALES PER DAY LINE CHART
-
 var salesPerDay = {
 		
 	URL : "/sales/per-day",
@@ -691,11 +691,16 @@ function SalesPerDayData(date, amount, label) {
 //-----------------------
 //- MONTHLY SALES CHART -
 //-----------------------
-
-// Get context with jQuery - using jQuery's .get() method.
-var salesChartCanvas = $("#salesChart").get(0).getContext("2d");
-// This will get the first returned node in the jQuery collection.
-var salesChart = new Chart(salesChartCanvas);
+var salesChart = {
+	init: function(){
+		// Get context with jQuery - using jQuery's .get() method.
+		var salesChartCanvas = $("#salesChart").get(0).getContext("2d");
+		// This will get the first returned node in the jQuery collection.
+		var salesChart = new Chart(salesChartCanvas);
+		//Create the line chart
+		salesChart.Line(salesChartData, salesChartOptions);
+	}	
+}
 
 var salesChartData = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -751,10 +756,53 @@ var salesChartOptions = {
   //Boolean - whether to make the chart responsive to window resizing
   responsive: true
 };
-
-//Create the line chart
-salesChart.Line(salesChartData, salesChartOptions);
-
 //---------------------------
 //- END MONTHLY SALES CHART -
 //---------------------------
+
+//SALES PER DAY LINE CHART
+
+var salesDistributed = {
+		
+	URL : "/sales/distribution/approximated",
+	
+	init : function(){
+		$.ajax({
+			url : salesDistributed.URL,
+			type : 'GET',
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				var chartData = [];
+				$.each(data, function(index, item) {
+					chartData.push(new SalesApproximated(item.x, item.y));
+				});
+				salesDistributed.build(chartData);
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert(textStatus + '\n' + errorThrown);
+			}
+		});
+	},
+	
+	build : function(chartData){
+		var line = new Morris.Line({
+		  element: 'dist-line-chart',
+		  resize: true,
+		  data: chartData,
+		  xkey: 'x',
+		  ykeys: ['y'],
+		  parseTime: false,
+		  labels: ['sold amount'],
+		  xlabels: ['day'],
+		  postUnits: [' days'],
+		  lineColors: ['#3c8dbc'],
+		  hideHover: 'auto',
+		  ymin: 0
+		});
+	} 	
+};
+function SalesApproximated(x, y) {
+	this.x = x;
+	this.y = y;
+}
+// END SALES PER DAY LINE CHART

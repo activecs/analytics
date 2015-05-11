@@ -69,6 +69,20 @@
         </div><!-- /.box -->
         </div>
     </div>
+    
+    <div class="row">
+       <div class="col-md-6  col-md-offset-3">
+        <!-- LINE CHART -->
+        <div class="box box-info">
+          <div class="box-header">
+            <h3 class="box-title">Sales approximated distribution</h3>
+          </div>
+          <div class="box-body chart-responsive">
+            <div class="chart" id="dist-line-chart" style="height: 300px;"></div>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col (RIGHT) -->
+    </div>
 	
 	<div class="row">
 	  <div class="col-md-12">

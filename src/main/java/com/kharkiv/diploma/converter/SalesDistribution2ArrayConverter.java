@@ -12,6 +12,12 @@ public class SalesDistribution2ArrayConverter implements Converter<List<SalesDis
 
 	@Override
 	public double[][] convert(List<SalesDistribution> source) {
+		int rightConer = source.get(0).getAmount() - 2;
+		int leftConer = source.get(source.size()-1).getAmount() + 2;
+		
+		source.add(0, new SalesDistribution(rightConer, 0));
+		source.add(new SalesDistribution(leftConer, 0));
+		
 		double[][] target = new double[2][source.size()];
 		for (int i = 0; i < source.size(); i++) {
 			SalesDistribution distribution = source.get(i);

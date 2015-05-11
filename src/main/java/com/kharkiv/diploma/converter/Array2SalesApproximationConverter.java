@@ -18,6 +18,7 @@ public class Array2SalesApproximationConverter implements Converter<double[][], 
 			SalesApproximation approximation = new SalesApproximation();
 			approximation.setX(source[0][i]);
 			approximation.setY(source[1][i]);
+			target.add(approximation);
 		}
 		return target;
 	}
