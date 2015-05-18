@@ -75,7 +75,7 @@
         <!-- LINE CHART -->
         <div class="box box-info">
           <div class="box-header">
-            <h3 class="box-title">Sales approximated distribution</h3>
+            <h3 class="box-title">Sales probability</h3>
           </div>
           <div class="box-body chart-responsive">
             <div class="chart" id="dist-line-chart" style="height: 300px;"></div>

@@ -21,7 +21,7 @@ public class SalesForDay2SalesDistributionConverter implements Converter<List<Sa
 		Multimap<Integer, SalesForDay> salesGroupedByAmount = groupSalesWithEqualSoldAmount(source);
 		for(Integer soldAmount: salesGroupedByAmount.keySet()){
 			Collection<SalesForDay> salesWithEqualSoldAmount = salesGroupedByAmount.get(soldAmount);
-			target.add(new SalesDistribution(soldAmount, salesWithEqualSoldAmount.size()));
+			target.add(new SalesDistribution(soldAmount.doubleValue(), new Double(salesWithEqualSoldAmount.size())));
 		}
 		return target;
 	}

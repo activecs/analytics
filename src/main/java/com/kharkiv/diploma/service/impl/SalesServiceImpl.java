@@ -6,6 +6,7 @@ import static java.util.Collections.sort;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,9 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.kharkiv.diploma.converter.Array2SalesApproximationConverter;
 import com.kharkiv.diploma.converter.SalesDistribution2ArrayConverter;
@@ -102,8 +106,30 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<SalesApproximation> getApproximatedDistribution(Date startDate,	Date endDate, Product product) {
 		List<SalesDistribution> distribution = getDistribution(startDate, endDate, product);
+		distribution = standardizeDistribution(distribution);
 		double[][] approximatedResult = approximatonService.approximate(distribution2ArrayConverter.convert(distribution));
 		return array2SalesApproximationConverter.convert(approximatedResult);
+	}
+
+	private List<SalesDistribution> standardizeDistribution(final List<SalesDistribution> distribution) {
+		final double totalDayAmount = getDayNumber(distribution);
+		Collection<SalesDistribution> standardizedDistribution = Collections2.transform(distribution, new Function<SalesDistribution, SalesDistribution>() {
+			@Override
+			public SalesDistribution apply(SalesDistribution input) {
+				BigDecimal dayNumber = new BigDecimal(input.getDayNumber()/totalDayAmount);
+				dayNumber = dayNumber.setScale(3, RoundingMode.HALF_UP);
+				input.setDayNumber(dayNumber.doubleValue());
+				return input;
+			}
+		});
+		return Lists.newArrayList(standardizedDistribution);
+	}
+
+	private double getDayNumber(List<SalesDistribution> distributions) {
+		double number = 0;
+		for(SalesDistribution distaribution : distributions)
+			number += distaribution.getDayNumber();
+		return number;
 	}
 
 	@Override

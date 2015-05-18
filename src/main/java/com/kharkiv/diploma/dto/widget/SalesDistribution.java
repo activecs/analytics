@@ -6,10 +6,10 @@ public class SalesDistribution implements Serializable {
 
 	private static final long serialVersionUID = 5518752410511188348L;
 
-	private Integer amount;
-	private Integer dayNumber;
+	private Double amount;
+	private Double dayNumber;
 
-	public SalesDistribution(Integer amount, Integer dayNumber) {
+	public SalesDistribution(Double amount, Double dayNumber) {
 		super();
 		this.amount = amount;
 		this.dayNumber = dayNumber;
@@ -18,19 +18,19 @@ public class SalesDistribution implements Serializable {
 	public SalesDistribution() {
 	}
 
-	public Integer getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public Integer getDayNumber() {
+	public Double getDayNumber() {
 		return dayNumber;
 	}
 
-	public void setDayNumber(Integer dayNumber) {
+	public void setDayNumber(Double dayNumber) {
 		this.dayNumber = dayNumber;
 	}
 

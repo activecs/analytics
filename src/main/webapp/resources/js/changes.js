@@ -793,9 +793,8 @@ var salesDistributed = {
 		  xkey: 'x',
 		  ykeys: ['y'],
 		  parseTime: false,
-		  labels: ['sold amount'],
+		  labels: ['probability to sell items'],
 		  xlabels: ['day'],
-		  postUnits: [' days'],
 		  lineColors: ['#3c8dbc'],
 		  hideHover: 'auto',
 		  ymin: 0
