@@ -14,8 +14,8 @@ apply plugin: 'ssh'
 group = 'com.kharkiv.diploma'
 
 compileJava.options.encoding = 'UTF-8'
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 ext {
     notFound = 'not-found';
@@ -87,7 +87,6 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven {url 'http://dl.bintray.com/robfletcher/gradle-plugins'}
     }
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
@@ -96,12 +95,12 @@ buildscript {
 }
 
 dependencies {
-    def springVersion = '4.1.6.RELEASE'
-    def springSecurityVersion = '4.0.0.M2'
+    def springVersion = '4.3.1.RELEASE'
+    def springSecurityVersion = '4.1.1.RELEASE'
     def tomcatVersion = '7.0.55'
     def hybernateVersion = '4.3.5.Final'
-    def jacksonVersion = '2.4.0'
-    def log4j2Version = '2.0-rc1'
+    def jacksonVersion = '2.7.6'
+    def log4j2Version = '2.6.2'
 
     compile group: 'org.springframework', 				name:'spring-core', 					version:springVersion
     compile group: 'org.springframework', 				name:'spring-context', 					version:springVersion
@@ -112,6 +111,8 @@ dependencies {
     compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
     compile group: 'org.springframework',               name:'spring-aspects',                  version:springVersion
 	compile group: 'org.springframework.security', 		name:'spring-security-core', 			version:springSecurityVersion
+    compile group: 'org.springframework.security', 		name:'spring-security-web', 			version:springSecurityVersion
+    compile group: 'org.springframework.security', 		name:'spring-security-config', 			version:springSecurityVersion
     compile group: 'org.hibernate',						name:'hibernate-core', 					version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.2.Final'
@@ -132,7 +133,7 @@ dependencies {
     runtime group: 'org.apache.logging.log4j',	    	name:'log4j-slf4j-impl',		    	version:log4j2Version
     runtime group: 'org.apache.logging.log4j',	    	name:'log4j-core',				    	version:log4j2Version
     runtime group: 'org.apache.logging.log4j',	    	name:'log4j-jcl', 				    	version:log4j2Version
-    runtime group: 'mysql', 					    	name:'mysql-connector-java',	    	version:'5.1.30'
+    runtime group: 'mysql', 					    	name:'mysql-connector-java',	    	version:'5.1.35'
 
     testCompile group: 'junit', 			    		name: 'junit', 					    	version:'4.11'
     testCompile group: 'org.mockito', 			    	name: 'mockito-core', 			    	version: '1.9.5'

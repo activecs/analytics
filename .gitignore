@@ -5,6 +5,7 @@ bin/*
 .project
 .classpath
 .settings/*
+.metadata/*
 .gradle/*
 */.gradle
 .idea/*

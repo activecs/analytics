@@ -38,7 +38,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
+		<param-value>classpath:applicationContext.xml,classpath:security.xml</param-value>
 	</context-param>
 	<context-param>
 		<param-name>log4jConfiguration</param-name>
@@ -48,6 +48,15 @@
 		<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
 		<param-value>ru</param-value>
 	</context-param>
+
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>settingsFilter</filter-name>
