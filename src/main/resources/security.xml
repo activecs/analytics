@@ -5,10 +5,24 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http/>
+    <http pattern="/resources/**" security="none"/>
+
+    <http create-session="ifRequired" disable-url-rewriting="true"  >
+        <intercept-url pattern="/login*" access="isAnonymous()" />
+        <intercept-url pattern="/**" access="isAuthenticated()"/>
+        <form-login
+                login-page="/login"
+                default-target-url="/"
+                authentication-failure-url="/login.html?error=true" />
+        <logout logout-success-url="/" />
+        <csrf/>
+    </http>
+
 
     <user-service>
         <user name="user" password="password" authorities="ROLE_USER"/>
     </user-service>
+
+
 
 </b:beans>
